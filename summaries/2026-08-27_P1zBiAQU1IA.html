@@ -1,0 +1,63 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>AI models can now help run physical science experiments</title><style>
+:root{--bg:#fbfaf7;--fg:#1d1d1b;--muted:#6b6862;--rule:#e4e1da;--accent:#b4232a;--chip:#f1eee7}
+@media (prefers-color-scheme:dark){:root{--bg:#161615;--fg:#ecebe7;--muted:#a19e97;--rule:#33322f;--accent:#ff6b6b;--chip:#252422}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Inter,sans-serif}
+main{max-width:760px;margin:0 auto;padding:32px 16px 64px}
+h1{font-size:1.7rem;line-height:1.25;margin:.2em 0 .3em}h2{font-size:1.1rem;text-transform:uppercase;letter-spacing:.06em;margin:2.2em 0 .6em;padding-top:.8em;border-top:1px solid var(--rule)}
+h3{font-size:1rem;margin:1.4em 0 .3em}em{color:var(--muted)}a{color:var(--accent)}
+a.ts{font:500 .85em ui-monospace,SFMono-Regular,Menlo,monospace;background:var(--chip);padding:1px 6px;border-radius:4px;text-decoration:none;white-space:nowrap}
+img.thumb{width:100%;border-radius:8px;display:block;margin-bottom:12px}li{margin:.35em 0}blockquote{margin:0;padding-left:1em;border-left:3px solid var(--rule)}
+</style></head><body><main><a href="https://www.youtube.com/watch?v=P1zBiAQU1IA"><img class="thumb" alt="" src="https://i.ytimg.com/vi/P1zBiAQU1IA/hqdefault.jpg"></a><h1>AI models can now help run physical science experiments</h1>
+<p><em>Channel: Anthropic · Published: 2026-08-27 · Length: 11:11 · Transcript: captions (en) · Summarised: 2026-10-01</em><br />
+<em>Video: https://www.youtube.com/watch?v=P1zBiAQU1IA</em></p>
+<h2>Bottom line</h2>
+<p>Anthropic presents Model Hardware Standard (MHS), a general way for Claude to talk to and operate lab devices, built with neuroscientist Arco Bast. Demos show Claude driving a microscope, a robot arm, a Leica microscope and a liquid-handling experiment at Genentech. The claim: experiment setup, said to take about 80% of a scientist's time, could shrink from years to months.</p>
+<h2>Key takeaways</h2>
+<ul>
+<li><strong>The problem:</strong> the narrator says building experiments "takes maybe 80% of a scientist's time", work that is not science itself — devices, setup, hardware and software debugging. <a class="ts" href="https://www.youtube.com/watch?v=P1zBiAQU1IA&amp;t=21s">00:21</a></li>
+<li><strong>The idea:</strong> each lab device "speaks" a different language; Arco Bast found a way to connect any two devices, which became Model Hardware Standard, a general way for AI to interact with devices. <a class="ts" href="https://www.youtube.com/watch?v=P1zBiAQU1IA&amp;t=105s">01:45</a></li>
+<li><strong>Built-in safety limits:</strong> a safe range is defined for a robot arm, and a movement outside it requested of Claude is shown being refused by MHS. <a class="ts" href="https://www.youtube.com/watch?v=P1zBiAQU1IA&amp;t=207s">03:27</a></li>
+<li><strong>Claude is fallible and must be supervised:</strong> a Danaher/Leica scientist stresses Claude "will make mistakes" and that breaking a sample worth weeks of work and thousands of dollars ends the experiment. <a class="ts" href="https://www.youtube.com/watch?v=P1zBiAQU1IA&amp;t=284s">04:44</a></li>
+<li><strong>Fast prototyping:</strong> Claude wrote a tracking program with a UI that followed swimming algae for minutes; a participant says a PhD student could get such a setup running in two months instead of two years. <a class="ts" href="https://www.youtube.com/watch?v=P1zBiAQU1IA&amp;t=477s">07:57</a></li>
+<li><strong>Closed-loop drug discovery:</strong> at Genentech, Claude runs operations, reads results and adjusts parameters to reduce bubbles in liquid transfer; speakers call it the first time AI interacts with the physical world in drug discovery. <a class="ts" href="https://www.youtube.com/watch?v=P1zBiAQU1IA&amp;t=571s">09:31</a></li>
+<li><strong>Open horizon:</strong> a speaker says it is "very difficult for us to predict" how AI and MHS will affect the world 30, 50 years out, while others name drug development, quantum computing and nuclear fusion as targets. <a class="ts" href="https://www.youtube.com/watch?v=P1zBiAQU1IA&amp;t=626s">10:26</a></li>
+</ul>
+<h2>Section by section</h2>
+<h3><a class="ts" href="https://www.youtube.com/watch?v=P1zBiAQU1IA&amp;t=0s">00:00</a> From theory to hardware, and the MHS origin</h3>
+<p>The narrator frames the bottleneck: theories need physical experiments, and building them consumes most of a scientist's time. Joining Anthropic with a "pie in the sky" vision of AI running experiments, the narrator met neuroscientist Arco Bast, who studies memory formation in the brain and was setting up a difficult imaging experiment with a custom-built microscope. Bast's insight was a way to make devices with different "languages" talk to each other. Seeing it work, the narrator realised it could let AI run any experiment, and the two built Model Hardware Standard. Tests follow: a robot arm with a defined safe range refuses an out-of-range move, grabs an object after being asked from scratch, and the work moves to a Leica microscope with Danaher, where the scientist warns Claude will make mistakes and samples are costly.</p>
+<h3><a class="ts" href="https://www.youtube.com/watch?v=P1zBiAQU1IA&amp;t=335s">05:35</a> Microscopy, algae tracking and Genentech</h3>
+<p>On the Leica microscope, Claude is described as aware that switching to higher magnification can crash the lens into the sample; it produces a focused, false-coloured image and identifies lignified cell walls. The team proposes treating Claude as a colleague. Claude then writes a script, and at a participant's request a UI, to track swimming algae that a scientist would otherwise follow for hours; it tracks for several minutes. A speaker says this could cut setup from two years to two months, freeing time for biological questions. At Genentech, Claude runs a closed-loop liquid-handling experiment to reduce bubbles, which speakers frame as "more shots on the goal" in drug discovery. The video closes on hopes for drug development, quantum computing and nuclear fusion.</p>
+<h2>Notable quotes</h2>
+<ul>
+<li>"That process of building the experiment takes maybe 80% of a scientist's time." — narrator <a class="ts" href="https://www.youtube.com/watch?v=P1zBiAQU1IA&amp;t=21s">00:21</a></li>
+<li>"This idea could be used to have AI run any science experiment in the world." — narrator <a class="ts" href="https://www.youtube.com/watch?v=P1zBiAQU1IA&amp;t=142s">02:22</a></li>
+<li>"It will make mistakes. So we can think about this as an iterative process." — a Danaher/Leica scientist <a class="ts" href="https://www.youtube.com/watch?v=P1zBiAQU1IA&amp;t=290s">04:50</a></li>
+<li>"He doesn't need to spend two years to get it running. He only needs two months." — a participant <a class="ts" href="https://www.youtube.com/watch?v=P1zBiAQU1IA&amp;t=477s">07:57</a></li>
+<li>"This is really the first time in history where we are enabling AI to interact with the physical world in drug discovery." — a Genentech speaker <a class="ts" href="https://www.youtube.com/watch?v=P1zBiAQU1IA&amp;t=608s">10:08</a></li>
+</ul>
+<h2>Facts and figures</h2>
+<ul>
+<li>Building experiments takes "maybe 80%" of a scientist's time <a class="ts" href="https://www.youtube.com/watch?v=P1zBiAQU1IA&amp;t=21s">00:21</a> — narrator's estimate, no basis given in the video</li>
+<li>Arco Bast had been in the lab for a year setting up the experiment <a class="ts" href="https://www.youtube.com/watch?v=P1zBiAQU1IA&amp;t=69s">01:09</a> — his own statement</li>
+<li>Test command "Set beam one to 50% power" <a class="ts" href="https://www.youtube.com/watch?v=P1zBiAQU1IA&amp;t=122s">02:02</a> — demo</li>
+<li>A sample represents weeks of work and thousands of dollars in ingredients <a class="ts" href="https://www.youtube.com/watch?v=P1zBiAQU1IA&amp;t=295s">04:55</a> — the scientist's statement</li>
+<li>Setup time could drop from two years to two months for a PhD student <a class="ts" href="https://www.youtube.com/watch?v=P1zBiAQU1IA&amp;t=477s">07:57</a> — a participant's expectation, not measured</li>
+<li>Genentech tests thousands to millions of molecules to find one drug <a class="ts" href="https://www.youtube.com/watch?v=P1zBiAQU1IA&amp;t=521s">08:41</a> — Genentech speaker</li>
+<li>Long-term impact over 30, 50 years is called hard to predict <a class="ts" href="https://www.youtube.com/watch?v=P1zBiAQU1IA&amp;t=626s">10:26</a></li>
+</ul>
+<h2>Action items</h2>
+<ul>
+<li>None stated.</li>
+</ul>
+<h2>Verdict</h2>
+<ul>
+<li><strong>Watch in full if:</strong> you want to see the demos themselves — the robot arm grab and the algae tracking are visual and only described here.</li>
+<li><strong>Skip if:</strong> you need technical detail on how MHS works; the video gives none beyond "a general way for AI to interact with devices".</li>
+<li><strong>Best part:</strong> <a class="ts" href="https://www.youtube.com/watch?v=P1zBiAQU1IA&amp;t=204s">03:24–04:26</a> the safe-range refusal and the from-scratch robot arm grab.</li>
+</ul>
+<h2>Limits</h2>
+<ul>
+<li>Several demo outcomes (the robot arm grab at <a class="ts" href="https://www.youtube.com/watch?v=P1zBiAQU1IA&amp;t=236s">03:56</a>, the false-colour image, algae tracking) are visual; only the speakers' reactions are in the transcript.</li>
+<li>Most speakers are not named in the transcript; only Arco Bast is. Danaher, Leica and Genentech affiliations come from what speakers say.</li>
+<li>No technical specification, metrics or evaluation of MHS is given.</li>
+</ul></main></body></html>

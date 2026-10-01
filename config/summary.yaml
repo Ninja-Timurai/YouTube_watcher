@@ -1,0 +1,17 @@
+# Edit freely; no code changes needed.
+
+# Language the summary is written in. Quotes stay in the speaker's language; add a translation after them
+# in parentheses when this differs.
+output_language: English
+
+# Videos without creator chapters are split into windows of this length. Each segment gets its own
+# "Section by section" entry, which is how the checker proves the whole video was covered.
+segment_minutes: 8
+
+limits:
+  bottom_line_words: 90
+  takeaways: [5, 10]          # min, max bullets (min drops to 3 for short videos)
+  short_video_minutes: 10
+  quotes_max: 6
+  section_min_words: 25
+  quote_match: 0.85           # share of a quote's words that must appear in order at its timecode
