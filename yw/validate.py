@@ -81,6 +81,18 @@ def _num(s: str) -> str:
     return s.replace(",", "").rstrip(".")
 
 
+LANG_CODES = {"english": "en", "russian": "ru", "german": "de", "french": "fr", "spanish": "es", "dutch": "nl",
+              "italian": "it", "portuguese": "pt", "ukrainian": "uk"}
+
+
+def same_language(meta: dict, cfg: dict) -> bool:
+    """False when the summary is written in another language than the transcript, so word overlap means nothing."""
+    out = str(cfg.get("output_language", "")).strip().lower()
+    out = LANG_CODES.get(out, out[:2])
+    src = (meta.get("transcript_lang") or "").lower().split("-")[0]
+    return not src or not out or src == out
+
+
 def validate(md: str, meta: dict, segs: list[dict], transcript: str, cfg: dict) -> Report:
     from .segments import lines as tlines
     rep = Report()
@@ -90,6 +102,7 @@ def validate(md: str, meta: dict, segs: list[dict], transcript: str, cfg: dict) 
     full_text = transcript
     full_nums = {_num(n) for n in NUMBER.findall(re.sub(r"\[\d[\d:]*\]", " ", transcript))}
     head, secs = split_sections(md)
+    overlap = same_language(meta, cfg)
 
     if not re.search(r"^# .+", head, re.M):
         rep.errors.append("Missing '# <video title>' heading.")
@@ -136,7 +149,8 @@ def validate(md: str, meta: dict, segs: list[dict], transcript: str, cfg: dict) 
             t = config.parse(stamps[0][0])
             near = window(tl, t, 60, 180)
             content = {w for w in words(_plain(re.sub(QUOTED, ' ', b))) if len(w) > 4}
-            if content and len(content & set(words(near))) / len(content) < 0.15 and name != "Notable quotes":
+            if overlap and content and len(content & set(words(near))) / len(content) < 0.15 \
+                    and name != "Notable quotes":
                 rep.warnings.append(f"{name}: little overlap with transcript at [{stamps[0][0]}] — check the "
                                     f"timecode: {b[:70]!r}")
 

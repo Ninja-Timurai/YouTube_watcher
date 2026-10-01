@@ -1,5 +1,5 @@
 ---
-description: Watch YouTube video(s) in full and write executive summaries
+description: Summarise Video — watch YouTube video(s) in full and write executive summaries
 argument-hint: <youtube url> [more urls] | <@channel or playlist url> [count]
 ---
 Run the YouTube Watcher procedure in AGENTS.md end to end for: $ARGUMENTS

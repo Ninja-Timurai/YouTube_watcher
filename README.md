@@ -9,10 +9,10 @@ Built on the architecture of [ahead_of_ai](https://github.com/Ninja-Timurai/ahea
 Claude Code, in a session on this repository:
 
 ```
-/summarize https://www.youtube.com/watch?v=P1zBiAQU1IA
-/summarize https://youtu.be/abc https://youtu.be/def
-/summarize @lexfridman 2          # newest 2 videos of a channel
-/summarize https://www.youtube.com/playlist?list=PL... 5
+/summarise-video https://www.youtube.com/watch?v=P1zBiAQU1IA
+/summarise-video https://youtu.be/abc https://youtu.be/def
+/summarise-video @lexfridman 2          # newest 2 videos of a channel
+/summarise-video https://www.youtube.com/playlist?list=PL... 5
 ```
 
 Codex: `Summarize https://youtu.be/... following AGENTS.md.`
