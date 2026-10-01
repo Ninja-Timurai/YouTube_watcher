@@ -52,7 +52,8 @@ python -m yw info <id>                     # facts, transcript caveats, segment 
 python -m yw resegment <id> --minutes N
 python -m yw scaffold <id>                 # summary.md skeleton: header + one heading per segment
 python -m yw check <id>                    # validate against the transcript
-python -m yw render <id>                   # validate, write summaries/*.html and *.md
+python -m yw render <id>                   # validate, write summaries/*.html and *.md, print links
+python -m yw link <id> [url]               # record or show the published page link
 python -m pytest -q
 ```
 

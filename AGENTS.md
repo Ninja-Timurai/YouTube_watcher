@@ -23,7 +23,9 @@ Run every command from the repo root. `<id>` is the 11-character video id, print
 5. Read **every** segment file listed, in order, in full. Speaker names come only from what is said or shown in the title/description; otherwise "a speaker", "the host", "the interviewer".
 6. `python -m yw scaffold <id>` — writes `runs/<id>/summary.md` with the header and one heading per segment. Write it in the language `info` names, keeping the localized headings. Fill it following `templates/summary.md` and `prompts/writing.md`. Replace every TODO. Untitled segment headings get a short descriptive title; keep the timecode.
 7. Faithfulness self-check (`prompts/writing.md`), then `python -m yw check <id>` — fix every ERROR and re-run until PASS. Treat WARNs as likely wrong timecodes and fix them. Never weaken accuracy to pass: remove the claim instead.
-8. `python -m yw render <id>`.
-9. Report per video in three lines or fewer: title, output path, video minutes vs reading minutes, transcript caveats.
+8. `python -m yw render <id>` — writes the page and markdown and prints the page title and any link already recorded.
+9. **Publish — every summary ends with a link.** Publish the page (`summaries/<published>_<id>.html`) with the Artifact tool: if `render` printed a `published:` link, pass it as `url` (read it first) so the same link updates; otherwise publish new with `icon: "video"` and a one-sentence `description` in the summary's language. Then `python -m yw link <id> <url>`. Without an Artifact tool (e.g. Codex), commit and push `summaries/` and use the `github:` link `render` printed.
+10. Commit and push `summaries/` (the `.md`, `.html` and `links.json`) to the working branch.
+11. Report per video in three lines or fewer: **the link first**, then title, video minutes vs reading minutes, transcript caveats.
 
 For several videos, finish each one through `render` before starting the next.

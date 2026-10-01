@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import sys
 from datetime import date, datetime, timezone
 
@@ -122,6 +123,25 @@ def cmd_check(a) -> None:
     sys.exit(0 if rep.ok else 1)
 
 
+def _links() -> dict:
+    path = config.ROOT / "summaries" / "links.json"
+    return json.loads(path.read_text(encoding="utf-8")) if path.exists() else {}
+
+
+def _github_url(rel: str) -> str:
+    """Web address of a repository file on the current branch (valid once pushed), or ''."""
+    import subprocess
+    try:
+        remote = subprocess.run(["git", "remote", "get-url", "origin"], cwd=config.ROOT, capture_output=True,
+                                text=True, check=True).stdout.strip()
+        branch = subprocess.run(["git", "branch", "--show-current"], cwd=config.ROOT, capture_output=True,
+                                text=True, check=True).stdout.strip()
+    except Exception:
+        return ""
+    m = re.search(r"github\.com[:/](.+?)(?:\.git)?$", remote)
+    return f"https://github.com/{m.group(1)}/blob/{branch}/{rel}" if m and branch else ""
+
+
 def cmd_render(a) -> None:
     run, meta, md, rep = _check(a.slug)
     if not rep.ok:
@@ -131,10 +151,28 @@ def cmd_render(a) -> None:
     out = config.ROOT / "summaries"
     out.mkdir(exist_ok=True)
     stem = f"{meta['published']}_{meta['id']}"
-    (out / f"{stem}.md").write_text(render.link_stamps(md, meta["id"]), encoding="utf-8")
-    (out / f"{stem}.html").write_text(render.to_html(md, meta, i18n.summary_lang(meta, config.settings())), encoding="utf-8")
     read_min = max(1, round(len(validate.words(md)) / READ_WPM))
-    print(f"{out / stem}.html\n{out / stem}.md\nVideo {round(meta['duration'] / 60)} min -> read ~{read_min} min")
+    lang = i18n.summary_lang(meta, config.settings())
+    (out / f"{stem}.md").write_text(render.link_stamps(md, meta["id"]), encoding="utf-8")
+    (out / f"{stem}.html").write_text(render.to_html(md, meta, lang, read_min), encoding="utf-8")
+    print(f"page:      {out / stem}.html")
+    print(f"markdown:  {out / stem}.md")
+    print(f"title:     {render.page_title(meta['title'])}")
+    print(f"published: {_links().get(meta['id']) or 'not yet — publish the page, then: python -m yw link ' + meta['id'] + ' <url>'}")
+    gh = _github_url(f"summaries/{stem}.md")
+    if gh:
+        print(f"github:    {gh} (after push)")
+    print(f"Video {round(meta['duration'] / 60)} min -> read ~{read_min} min")
+
+
+def cmd_link(a) -> None:
+    links = _links()
+    if a.url:
+        links[a.slug] = a.url
+        path = config.ROOT / "summaries" / "links.json"
+        path.parent.mkdir(exist_ok=True)
+        path.write_text(json.dumps(links, indent=1, sort_keys=True) + "\n", encoding="utf-8")
+    print(links.get(a.slug, "no published link"))
 
 
 def cmd_latest(a) -> None:
@@ -161,6 +199,11 @@ def main(argv: list[str] | None = None) -> None:
     s.add_argument("--no-generate", action="store_true", help="never fall back to AI transcription")
     s.add_argument("--force", action="store_true")
     s.set_defaults(fn=cmd_fetch)
+
+    s = sub.add_parser("link", help="record (with URL) or show the published page link of a summary")
+    s.add_argument("slug")
+    s.add_argument("url", nargs="?")
+    s.set_defaults(fn=cmd_link)
 
     s = sub.add_parser("latest", help="list newest videos of a channel (@handle/URL) or playlist")
     s.add_argument("source")
