@@ -1,3 +1,4 @@
+<!-- Headings and labels shown in English; `scaffold` writes them in the summary's language. -->
 # {Video title}
 
 _Channel: {channel} · Published: {YYYY-MM-DD} · Length: {h:mm:ss} · Transcript: {captions | AI transcript} ({lang}) · Summarised: {date}_  

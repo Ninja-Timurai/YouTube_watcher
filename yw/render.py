@@ -28,11 +28,11 @@ def link_stamps(md: str, vid: str) -> str:
     return TS.sub(sub, md)
 
 
-def to_html(md: str, meta: dict) -> str:
+def to_html(md: str, meta: dict, lang: str = "en") -> str:
     linked = link_stamps(md, meta["id"])
     body = markdown.markdown(linked, extensions=["extra", "sane_lists"])
     body = re.sub(r'<a href="(https://www\.youtube\.com/watch\?v=[\w-]+&amp;t=\d+s)"', r'<a class="ts" href="\1"', body)
     thumb = f'<a href="{meta["url"]}"><img class="thumb" alt="" src="https://i.ytimg.com/vi/{meta["id"]}/hqdefault.jpg"></a>'
-    return (f'<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" '
+    return (f'<!doctype html><html lang="{lang}"><head><meta charset="utf-8"><meta name="viewport" '
             f'content="width=device-width,initial-scale=1"><title>{html.escape(meta["title"][:80])}</title>'
             f'<style>{CSS}</style></head><body><main>{thumb}{body}</main></body></html>')

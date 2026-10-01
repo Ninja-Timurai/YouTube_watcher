@@ -124,3 +124,18 @@ def test_long_chapter_is_split_and_segments_cover_video():
 
 def test_iso_duration():
     assert youtube.iso_duration("PT1H2M3S") == 3723 and youtube.iso_duration("PT45S") == 45
+
+
+def test_localized_headings_accepted():
+    from yw import i18n
+    meta = {**META, "transcript_lang": "ru"}
+    md = summary()
+    ru, en = i18n.LABELS["ru"], i18n.LABELS["en"]
+    for k, local in zip(i18n.KEYS, ru["sections"]):
+        md = md.replace(f"## {k}\n", f"## {local}\n")
+    for k in ("channel", "length", "transcript", "watch", "skip", "best"):
+        md = md.replace(en[k] + ":", ru[k] + ":")
+    md = md.replace("None stated.", ru["none"])
+    assert validate(md, meta, SEGS, TRANSCRIPT, CFG).errors == []
+    assert i18n.summary_lang(meta, {"output_language": "video"}) == "ru"
+    assert i18n.summary_lang(meta, {"output_language": "English"}) == "en"

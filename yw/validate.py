@@ -7,7 +7,7 @@ from __future__ import annotations
 import re
 from dataclasses import dataclass, field
 
-from . import config
+from . import config, i18n
 
 SECTIONS = ["Bottom line", "Key takeaways", "Section by section", "Notable quotes", "Facts and figures",
             "Action items", "Verdict", "Limits"]
@@ -16,7 +16,8 @@ TS = re.compile(r"\[(\d{1,2}:\d{2}(?::\d{2})?)(?:\s*[-–]\s*(\d{1,2}:\d{2}(?::\
 QUOTED = re.compile(r"[\"“]([^\"“”]*)[\"”]")
 NUMBER = re.compile(r"(?<![\w:.])(\d[\d,]*(?:\.\d+)?)(?![\d:])")
 WORD = re.compile(r"[^\W_]+(?:'[^\W_]+)?")
-NONE = re.compile(r"^\s*none (stated|given|made)\.?\s*$", re.I)
+NONE = re.compile(r"^\s*(none (stated|given|made)|" + "|".join(re.escape(l["none"].rstrip(".")) for l in
+                  i18n.LABELS.values()) + r")\.?\s*$", re.I)
 
 
 @dataclass
@@ -30,8 +31,10 @@ class Report:
 
 
 def split_sections(md: str) -> tuple[str, dict[str, str]]:
+    """Sections keyed by canonical English name, whatever language their headings are in."""
     parts = re.split(r"^## +(.+?)\s*$", md, flags=re.M)
-    return parts[0], {parts[i].strip(): parts[i + 1] for i in range(1, len(parts), 2)}
+    alias = i18n.aliases()
+    return parts[0], {alias.get(parts[i].strip(), parts[i].strip()): parts[i + 1] for i in range(1, len(parts), 2)}
 
 
 def bullets(text: str) -> list[str]:
@@ -81,16 +84,10 @@ def _num(s: str) -> str:
     return s.replace(",", "").rstrip(".")
 
 
-LANG_CODES = {"english": "en", "russian": "ru", "german": "de", "french": "fr", "spanish": "es", "dutch": "nl",
-              "italian": "it", "portuguese": "pt", "ukrainian": "uk"}
-
-
 def same_language(meta: dict, cfg: dict) -> bool:
     """False when the summary is written in another language than the transcript, so word overlap means nothing."""
-    out = str(cfg.get("output_language", "")).strip().lower()
-    out = LANG_CODES.get(out, out[:2])
-    src = (meta.get("transcript_lang") or "").lower().split("-")[0]
-    return not src or not out or src == out
+    src = i18n.base(meta.get("transcript_lang"))
+    return not src or i18n.summary_lang(meta, cfg) == src
 
 
 def validate(md: str, meta: dict, segs: list[dict], transcript: str, cfg: dict) -> Report:
@@ -103,15 +100,17 @@ def validate(md: str, meta: dict, segs: list[dict], transcript: str, cfg: dict) 
     full_nums = {_num(n) for n in NUMBER.findall(re.sub(r"\[\d[\d:]*\]", " ", transcript))}
     head, secs = split_sections(md)
     overlap = same_language(meta, cfg)
+    lab = i18n.labels(i18n.summary_lang(meta, cfg))
 
     if not re.search(r"^# .+", head, re.M):
         rep.errors.append("Missing '# <video title>' heading.")
-    for k in ("Channel:", "Length:", "Transcript:"):
+    for k in (lab["channel"] + ":", lab["length"] + ":", lab["transcript"] + ":"):
         if k not in head:
             rep.errors.append(f"Header line missing '{k}' (use `python -m yw scaffold`).")
     for name in SECTIONS:
         if name not in secs:
-            rep.errors.append(f"Missing section '## {name}'.")
+            local = dict(zip(i18n.KEYS, lab["sections"]))[name]
+            rep.errors.append(f"Missing section '## {local}'.")
     order = [s for s in secs if s in SECTIONS]
     if order != [s for s in SECTIONS if s in secs]:
         rep.errors.append(f"Sections out of order: {order}")
@@ -214,7 +213,7 @@ def validate(md: str, meta: dict, segs: list[dict], transcript: str, cfg: dict) 
 
     # Verdict
     v = secs.get("Verdict", "")
-    for k in ("Watch in full if", "Skip if", "Best part"):
+    for k in (lab["watch"], lab["skip"], lab["best"]):
         if k.lower() not in v.lower():
             rep.errors.append(f"Verdict: missing '**{k}:**' line.")
 

@@ -19,6 +19,10 @@ Codex: `Summarize https://youtu.be/... following AGENTS.md.`
 
 Output: `summaries/<published>_<video id>.html` (self-contained, light/dark) and `.md`. Example: `summaries/2026-08-27_P1zBiAQU1IA.md` — an 11-minute video, ~4-minute read.
 
+## Language
+
+Summaries are written in the video's own language (taken from the transcript), with headings localized for en, ru, uk, de, es, fr. Set `output_language: English` (or another language) in `config/summary.yaml` to force one language.
+
 ## What the summary contains
 
 Bottom line · Key takeaways · Section by section (one per chapter or 8-minute window) · Notable quotes · Facts and figures · Action items · Verdict (watch / skip / best minutes) · Limits (AI transcript, visual-only content).
@@ -56,7 +60,7 @@ python -m pytest -q
 
 | File | Controls |
 |---|---|
-| `config/summary.yaml` | output language, segment length, limits, quote-match threshold |
+| `config/summary.yaml` | output language (default: the video's), segment length, limits, quote-match threshold |
 | `prompts/writing.md` | how each section is written; faithfulness rules |
 | `templates/summary.md` | layout |
 

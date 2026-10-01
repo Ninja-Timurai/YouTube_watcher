@@ -1,8 +1,9 @@
 # Edit freely; no code changes needed.
 
-# Language the summary is written in. Quotes stay in the speaker's language; add a translation after them
-# in parentheses when this differs.
-output_language: English
+# Language the summary is written in. "video" (default): the video's own language, with section headings and
+# labels localized (en, ru, uk, de, es, fr; others use English headings). Or name one, e.g. English, to force it;
+# quotes then stay in the speaker's language with a translation in parentheses.
+output_language: video
 
 # Videos without creator chapters are split into windows of this length. Each segment gets its own
 # "Section by section" entry, which is how the checker proves the whole video was covered.

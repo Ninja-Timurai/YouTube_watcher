@@ -6,7 +6,7 @@ import json
 import sys
 from datetime import date, datetime, timezone
 
-from . import config, render, segments, transcript, validate, youtube
+from . import config, i18n, render, segments, transcript, validate, youtube
 
 READ_WPM = 230
 
@@ -63,6 +63,7 @@ def cmd_info(a) -> None:
     print(f"{meta['title']}\n{meta['channel']} · {meta['published']} · {config.fmt(meta['duration'])} · "
           f"{meta['views']:,} views\nTranscript: {meta['transcript_method']} ({meta['transcript_lang'] or '?'})"
           + (f" · notes: {'; '.join(meta['transcript_notes'])}" if meta["transcript_notes"] else ""))
+    print(f"Write the summary in: {i18n.summary_lang(meta, config.settings())}")
     print(f"Chapters from description: {'yes' if meta['chapters'] else 'no'}\nSegments (read every file in full):")
     for i, s in enumerate(segs, 1):
         print(f"  {i:>2}. {config.fmt(s['start']):>8}–{config.fmt(s['end']):<8} {s['words']:>6} words  "
@@ -80,17 +81,21 @@ def cmd_scaffold(a) -> None:
     path = run / "summary.md"
     if path.exists() and not a.force:
         raise SystemExit(f"{path} exists; use --force to overwrite.")
-    method = {"captions": "captions", "ai_transcript": "AI transcript"}[meta["transcript_method"]]
+    lang = i18n.summary_lang(meta, config.settings())
+    L = i18n.labels(lang)
+    S = dict(zip(i18n.KEYS, L["sections"]))
+    method = L["captions"] if meta["transcript_method"] == "captions" else L["ai_transcript"]
     sections = "\n".join(f"### [{config.fmt(s['start'])}] {s['title'] or 'TODO title'}\nTODO\n" for s in segs)
     md = (f"# {meta['title']}\n\n"
-          f"_Channel: {meta['channel']} · Published: {meta['published']} · Length: {config.fmt(meta['duration'])} · "
-          f"Transcript: {method} ({meta['transcript_lang'] or '?'}) · Summarised: {date.today().isoformat()}_  \n"
-          f"_Video: {meta['url']}_\n\n"
-          "## Bottom line\n\nTODO\n\n## Key takeaways\n\n- TODO [00:00]\n\n"
-          f"## Section by section\n\n{sections}\n"
-          "## Notable quotes\n\n- \"TODO\" — speaker [00:00]\n\n## Facts and figures\n\n- TODO [00:00]\n\n"
-          "## Action items\n\n- TODO [00:00]\n\n## Verdict\n\n- **Watch in full if:** TODO\n- **Skip if:** TODO\n"
-          "- **Best part:** TODO\n\n## Limits\n\n- TODO\n")
+          f"_{L['channel']}: {meta['channel']} · {L['published']}: {meta['published']} · "
+          f"{L['length']}: {config.fmt(meta['duration'])} · {L['transcript']}: {method} "
+          f"({meta['transcript_lang'] or '?'}) · {L['summarised']}: {date.today().isoformat()}_  \n"
+          f"_{L['video']}: {meta['url']}_\n\n"
+          f"## {S['Bottom line']}\n\nTODO\n\n## {S['Key takeaways']}\n\n- TODO [00:00]\n\n"
+          f"## {S['Section by section']}\n\n{sections}\n"
+          f"## {S['Notable quotes']}\n\n- \"TODO\" — TODO [00:00]\n\n## {S['Facts and figures']}\n\n- TODO [00:00]\n\n"
+          f"## {S['Action items']}\n\n- TODO [00:00]\n\n## {S['Verdict']}\n\n- **{L['watch']}:** TODO\n"
+          f"- **{L['skip']}:** TODO\n- **{L['best']}:** TODO\n\n## {S['Limits']}\n\n- TODO\n")
     path.write_text(md, encoding="utf-8")
     print(path)
 
@@ -127,7 +132,7 @@ def cmd_render(a) -> None:
     out.mkdir(exist_ok=True)
     stem = f"{meta['published']}_{meta['id']}"
     (out / f"{stem}.md").write_text(render.link_stamps(md, meta["id"]), encoding="utf-8")
-    (out / f"{stem}.html").write_text(render.to_html(md, meta), encoding="utf-8")
+    (out / f"{stem}.html").write_text(render.to_html(md, meta, i18n.summary_lang(meta, config.settings())), encoding="utf-8")
     read_min = max(1, round(len(validate.words(md)) / READ_WPM))
     print(f"{out / stem}.html\n{out / stem}.md\nVideo {round(meta['duration'] / 60)} min -> read ~{read_min} min")
 
