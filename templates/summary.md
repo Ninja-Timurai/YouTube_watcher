@@ -6,41 +6,41 @@ _Video: {url}_
 
 ## Bottom line
 
-{2–4 sentences, at most 90 words: what the video is, its central claim or answer, and the single most useful thing in it.}
+{1–3 sentences, at most 50 words: what the video is and its central claim or answer.}
 
 ## Key takeaways
 
-- **{Short label}:** {one or two sentences, at the speaker's strength} [mm:ss]
-- ... (5–10; 3–10 for videos under 10 minutes; ordered by importance, not by time)
+- **{Short label}:** {one sentence, at most 30 words, at the speaker's strength} [mm:ss]
+- ... (3–5, ordered by importance, not by time)
 
 ## Section by section
 
-### [mm:ss] {Chapter title, or a short descriptive title}
-{3–6 sentences: what is said or shown in this segment, who says it, what it leads to.}
-
-...one per segment, as scaffolded...
+- [mm:ss] **{Chapter title}** — {one line, at most 25 words}
+- [mm:ss–mm:ss] **{Group title}** — {one line covering several neighbouring segments}
+- ... (every segment covered; at most 12 lines)
 
 ## Notable quotes
 
-- "{verbatim transcript words}" — {speaker or "a speaker"} [mm:ss]
-- ... (2–6; or "None stated.")
+- "{verbatim transcript words}" — {speaker} [mm:ss]
+- ... (at most 2; or "None stated.")
 
 ## Facts and figures
 
-- {number, date, name or measurable claim, as spoken} [mm:ss] — {basis the speaker gives, or "no basis given in the video"}
-- ... (or "None stated.")
+- {number or measurable claim, as spoken} [mm:ss] — {basis, or "no basis given"}
+- ... (at most 4; or "None stated.")
 
 ## Action items
 
-- {recommendation, instruction, resource or next step the video gives the viewer} [mm:ss]
-- ... (or "None stated.")
+- {what the video tells the viewer to do} [mm:ss]  (at most 3; or "None stated.")
 
 ## Verdict
 
-- **Watch in full if:** {who gains from the full video beyond this summary}
-- **Skip if:** {who does not}
-- **Best part:** [mm:ss–mm:ss] {why these minutes}
+- **Watch in full if:** {one line}
+- **Skip if:** {one line}
+- **Best part:** [mm:ss–mm:ss] {one line}
 
 ## Limits
 
-- {Transcript caveats (AI transcript, sparse captions, music), content that is visual only (demos, slides, charts) and so not captured, speakers that could not be identified. "Nothing material." if true.}
+- {at most 2 bullets: transcript caveats, visual-only content. "Nothing material." if true.}
+
+<!-- Whole summary: at most 500 words — one A4 page. -->

@@ -12,15 +12,16 @@ TRANSCRIPT = "".join(f"[{config.fmt(t)}] {line}\n" for t, line in [
     (560, "He only needs two months instead of two years."),
 ])
 META = {"id": "abcdefghijk", "duration": 600, "chapters": [], "transcript_notes": []}
-CFG = {"limits": {"bottom_line_words": 90, "takeaways": [5, 10], "short_video_minutes": 10, "quotes_max": 6,
-                  "section_min_words": 5, "quote_match": 0.85}}
+CFG = {"limits": {"max_words": 500, "bottom_line_words": 50, "takeaways": [3, 5], "short_video_minutes": 10,
+                  "bullet_words": 30, "timeline_entry_words": 25, "timeline_max_entries": 12, "quotes_max": 2,
+                  "facts_max": 4, "actions_max": 3, "limits_max": 2, "quote_match": 0.85}}
 SEGS = segments.build(TRANSCRIPT, 600, [], 5)
 FILL = "words words words words words words"
 
 
 def summary(quote='"It will make mistakes. So we can think about this as an iterative process." — a speaker [07:00]',
             figure="- Setup takes maybe 80% of a scientist's time [00:21]", sections=None):
-    sections = sections or "".join(f"### [{config.fmt(s['start'])}] Part\n{FILL}\n\n" for s in SEGS)
+    sections = sections or "".join(f"- [{config.fmt(s['start'])}] **Part** — {FILL}\n" for s in SEGS)
     takeaways = "\n".join(f"- **T{i}:** scientists theories experiment [00:02]" for i in range(5))
     return f"""# Title
 
@@ -84,7 +85,7 @@ def test_unspoken_number_rejected():
 
 def test_skipped_segment_rejected():
     first = SEGS[0]
-    md = summary(sections=f"### [{config.fmt(first['start'])}] Only the start\n{FILL}\n\n")
+    md = summary(sections=f"- [{config.fmt(first['start'])}] **Only the start** — {FILL}\n")
     assert any("Every segment must be covered" in e for e in errors(md))
 
 
@@ -139,3 +140,21 @@ def test_localized_headings_accepted():
     assert validate(md, meta, SEGS, TRANSCRIPT, CFG).errors == []
     assert i18n.summary_lang(meta, {"output_language": "video"}) == "ru"
     assert i18n.summary_lang(meta, {"output_language": "English"}) == "en"
+
+
+def test_range_entry_covers_grouped_segments():
+    md = summary(sections=f"- [00:00–{config.fmt(SEGS[-1]['end'])}] **Whole video** — {FILL}\n")
+    assert errors(md) == []
+
+
+def test_over_one_page_rejected():
+    long_bl = "word " * 600
+    md = summary().replace("A short bottom line.", long_bl)
+    e = errors(md)
+    assert any("one A4 page" in x for x in e) and any("Bottom line is" in x for x in e)
+
+
+def test_too_many_quotes_rejected():
+    q = '"It will make mistakes. So we can think about this as an iterative process." [07:00]'
+    md = summary(quote=q + "\n- " + q + "\n- " + q)
+    assert any("Notable quotes: 3 bullets" in x for x in errors(md))

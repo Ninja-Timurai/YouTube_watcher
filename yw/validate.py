@@ -136,6 +136,22 @@ def validate(md: str, meta: dict, segs: list[dict], transcript: str, cfg: dict) 
     if not lo <= len(kt) <= hi:
         rep.errors.append(f"Key takeaways: {len(kt)} bullets; need {lo}–{hi}.")
 
+    # One A4 page: per-section caps and a total word budget.
+    for name, cap in (("Notable quotes", lim["quotes_max"]), ("Facts and figures", lim["facts_max"]),
+                      ("Action items", lim["actions_max"]), ("Limits", lim["limits_max"])):
+        n = len([b for b in bullets(secs.get(name, "")) if not NONE.match(b)])
+        if n > cap:
+            rep.errors.append(f"{name}: {n} bullets; limit {cap}.")
+    for name in ("Key takeaways", "Facts and figures", "Action items", "Limits"):
+        for b in bullets(secs.get(name, "")):
+            n = len(words(_plain(b)))
+            if n > lim["bullet_words"]:
+                rep.errors.append(f"{name}: bullet is {n} words; limit {lim['bullet_words']}: {b[:60]!r}")
+    body = "\n".join(secs.values())
+    total = len(words(_plain(re.sub(r"\(https?://[^)]*\)", " ", body))))
+    if total > lim["max_words"]:
+        rep.errors.append(f"Summary is {total} words; one A4 page allows {lim['max_words']}. Cut, don't cram.")
+
     # Every bullet in timed sections carries a timecode, and its words occur near that timecode.
     for name in TIMED:
         for b in bullets(secs.get(name, "")):
@@ -155,8 +171,6 @@ def validate(md: str, meta: dict, segs: list[dict], transcript: str, cfg: dict) 
 
     # Quotes: verbatim, at their timecode. Elsewhere in the summary: verbatim somewhere in the transcript.
     nq = bullets(secs.get("Notable quotes", ""))
-    if len([b for b in nq if not NONE.match(b)]) > lim["quotes_max"]:
-        rep.errors.append(f"Notable quotes: more than {lim['quotes_max']}.")
     for b in nq:
         qm, stamps = next((m for m in QUOTED.finditer(b) if len(m.group(1)) >= 8), None), TS.findall(b)
         if NONE.match(b):
@@ -195,21 +209,31 @@ def validate(md: str, meta: dict, segs: list[dict], transcript: str, cfg: dict) 
                 rep.errors.append(f"Facts and figures: number {x} does not occur in the transcript "
                                   f"(write it as spoken, or remove it): {b[:70]!r}")
 
-    # Coverage: one '### [start] Title' per segment, each with a body.
-    sbs = secs.get("Section by section", "")
-    heads = [(config.parse(m.group(1)), m.end()) for m in re.finditer(r"^### +\[(\d{1,2}:\d{2}(?::\d{2})?)\]", sbs, re.M)]
-    starts = [t for t, _ in heads]
+    # Coverage: timeline bullets '- [start] **Title** — line' or '- [start–end] ...'; every segment must have an
+    # entry starting inside it, or lie inside an entry's explicit range (used to group segments of long videos).
+    entries = []
+    for b in bullets(secs.get("Section by section", "")):
+        m = TS.match(b)
+        if not m:
+            rep.errors.append(f"Section by section: entry must start with a [mm:ss] timecode: {b[:60]!r}")
+            continue
+        start = config.parse(m.group(1))
+        end = config.parse(m.group(2)) if m.group(2) else None
+        entries.append((start, end))
+        n = len(words(_plain(b)))
+        if n > lim["timeline_entry_words"]:
+            rep.errors.append(f"Section by section: [{m.group(1)}] is {n} words; limit {lim['timeline_entry_words']}.")
+    if len(entries) > lim["timeline_max_entries"]:
+        rep.errors.append(f"Section by section: {len(entries)} entries; limit {lim['timeline_max_entries']} "
+                          f"(group neighbouring segments as [start–end]).")
     for s in segs:
-        if not any(s["start"] <= t < s["end"] for t in starts):
-            rep.errors.append(f"Section by section: no heading for segment {config.fmt(s['start'])}–"
-                              f"{config.fmt(s['end'])} ({s['title'] or 'untitled'}). Every segment must be covered.")
-    blocks = re.split(r"^### .*$", sbs, flags=re.M)[1:]
-    for (t, _), body in zip(heads, blocks):
-        w = len(words(_plain(body)))
-        if w < lim["section_min_words"]:
-            rep.errors.append(f"Section by section: [{config.fmt(t)}] has {w} words; minimum {lim['section_min_words']}.")
+        if not any(s["start"] <= t < s["end"] or (e is not None and t <= s["start"] + 5 and e >= s["end"] - 5)
+                   for t, e in entries):
+            rep.errors.append(f"Section by section: segment {config.fmt(s['start'])}–{config.fmt(s['end'])} "
+                              f"({s['title'] or 'untitled'}) not covered. Every segment must be covered.")
+    starts = [t for t, _ in entries]
     if starts != sorted(starts):
-        rep.errors.append("Section by section: headings not in time order.")
+        rep.errors.append("Section by section: entries not in time order.")
 
     # Verdict
     v = secs.get("Verdict", "")

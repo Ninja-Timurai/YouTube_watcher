@@ -2,6 +2,8 @@
 
 Format: `templates/summary.md`, filled into the file `python -m yw scaffold` writes. Language: the video's own language by default (`output_language: video` in `config/summary.yaml`; `python -m yw info` prints the language to use). Keep the localized headings and labels `scaffold` writes. Reader: an executive who will not watch the video and must be able to act on, repeat or cite what it says.
 
+**One A4 page, at most 500 words in total** (`check` enforces it with per-section caps). Every word must earn its place: no restating the same point in two sections, no narration ("the speaker then discusses…"), no adjectives that carry no information. When over budget, cut the least important point, never compress into unreadable shorthand.
+
 ## Faithfulness (every section)
 
 The checker proves timecodes, quotes, numbers and coverage. It cannot prove a sentence means what the speaker meant. These rules close that gap.
@@ -17,25 +19,25 @@ The checker proves timecodes, quotes, numbers and coverage. It cannot prove a se
 Re-read each takeaway, figure and action item against the transcript lines at its timecode: (1) the lines say it, (2) at the same strength, (3) by the speaker named, (4) with the same number. Fix or delete what fails.
 
 ## Bottom line
-Answer "what is this and what does it conclude?" first. No preamble ("In this video…"). If the video has no conclusion, say what it shows.
+At most 50 words. Answer "what is this and what does it conclude?" first. No preamble ("In this video…").
 
 ## Key takeaways
-Ordered by importance to the reader. Each: bold label, then the point. Prefer claims, decisions, numbers, reasons and consequences over descriptions of what happens. No two bullets make the same point.
+3–5 bullets, each at most 30 words, ordered by importance. Bold label, then the point. Prefer claims, decisions, numbers and consequences over descriptions. No two bullets make the same point.
 
 ## Section by section
-One entry per scaffolded heading, in time order; keep each heading's timecode (add a title where it says TODO). Compress, don't narrate: what is argued, shown or decided, and how it connects to the previous segment. Long videos: the same density per segment — later segments are not summarised more thinly than early ones.
+One line per segment, at most 25 words, in time order: `- [mm:ss] **Title** — what is argued or decided`. Keep the scaffolded timecodes and titles. More than 12 segments: merge neighbours into `- [start–end] **Title** — …` lines, where the range spans the merged segments. This is a map of the video, not a second summary: do not repeat the takeaways.
 
 ## Notable quotes
-The 2–6 sentences that carry the video's argument or are most quotable. Not jokes or filler unless they are the point.
+At most 2: the sentences that carry the argument. "None stated." if nothing is worth quoting.
 
 ## Facts and figures
-Every number, statistic, date, named organisation, product or study the video cites, with the basis given. "None stated." if there are none.
+At most 4: numbers, dates, named studies or organisations the video cites, with the basis given. "None stated." if none.
 
 ## Action items
-What the video tells the viewer to do, try, read or use. Not your recommendations. "None stated." if none.
+At most 3: what the video tells the viewer to do, try, read or use. Not your recommendations. "None stated." if none.
 
 ## Verdict
-Your editorial judgement, clearly marked by the labels. "Best part" is a time range from the transcript where the densest or most important material is.
+Your judgement, one line per label. "Best part" is a time range where the densest or most important material is.
 
 ## Limits
-Transcript method caveats from `python -m yw info` (sparse captions, AI transcript), visual-only content, unidentified speakers, music or non-speech gaps. "Nothing material." only if true.
+At most 2 bullets: transcript method caveats from `python -m yw info`, visual-only content, unidentified speakers. "Nothing material." only if true.

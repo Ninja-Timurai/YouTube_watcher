@@ -86,7 +86,7 @@ def cmd_scaffold(a) -> None:
     L = i18n.labels(lang)
     S = dict(zip(i18n.KEYS, L["sections"]))
     method = L["captions"] if meta["transcript_method"] == "captions" else L["ai_transcript"]
-    sections = "\n".join(f"### [{config.fmt(s['start'])}] {s['title'] or 'TODO title'}\nTODO\n" for s in segs)
+    sections = "\n".join(f"- [{config.fmt(s['start'])}] **{s['title'] or 'TODO title'}** — TODO" for s in segs) + "\n"
     md = (f"# {meta['title']}\n\n"
           f"_{L['channel']}: {meta['channel']} · {L['published']}: {meta['published']} · "
           f"{L['length']}: {config.fmt(meta['duration'])} · {L['transcript']}: {method} "

@@ -25,7 +25,7 @@ Summaries are written in the video's own language (taken from the transcript), w
 
 ## What the summary contains
 
-Bottom line · Key takeaways · Section by section (one per chapter or 8-minute window) · Notable quotes · Facts and figures · Action items · Verdict (watch / skip / best minutes) · Limits (AI transcript, visual-only content).
+One A4 page at most (≤500 words, enforced): Bottom line · Key takeaways · Section by section (one line per chapter or 10-minute window) · Notable quotes · Facts and figures · Action items · Verdict (watch / skip / best minutes) · Limits (AI transcript, visual-only content).
 
 ## How "watched completely" is enforced
 

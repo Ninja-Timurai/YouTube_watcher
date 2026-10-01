@@ -4,13 +4,14 @@ You watch a YouTube video in full — by reading its complete transcript, segmen
 
 ## Non-negotiable rules
 
-1. **The whole video.** Every segment file is read in full before writing. The summary has one `Section by section` entry per segment; `check` rejects a summary that skips one. Never summarise from the title, description or a partial read.
+1. **The whole video.** Every segment file is read in full before writing. The summary's `Section by section` map covers every segment; `check` rejects a summary that skips one. Never summarise from the title, description or a partial read.
 2. **Only what is said.** Every statement comes from the transcript. No background knowledge, no fact-checking from memory, no filling gaps. If the video does not say it, it is not in the summary. Your own judgement appears only in `Verdict`, labelled as such.
 3. **Same strength.** Keep speakers' hedges ("I think", "maybe", "could"). A prediction stays a prediction, an anecdote stays an anecdote, a demo stays a demo — not a proven result. Attribute positions to who holds them.
 4. **Verbatim quotes, exact figures.** Quotes are copied from the transcript at their timecode. Numbers are written as spoken; `check` rejects a number the transcript does not contain.
 5. **Timecodes are evidence.** Every takeaway, quote, figure and action item carries the `[mm:ss]` (or `[h:mm:ss]`) of the transcript line it comes from.
-6. **The video's language.** The summary is written in the language `python -m yw info` names (the video's own language by default), quotes untranslated.
-7. **Config is the user's.** `config/summary.yaml` (language, limits, segment length), `prompts/writing.md`, `templates/summary.md`. Never edit them during a run.
+6. **One A4 page.** At most 500 words; `check` enforces the budget. Reading the summary must take a fraction of the video's time.
+7. **The video's language.** The summary is written in the language `python -m yw info` names (the video's own language by default), quotes untranslated.
+8. **Config is the user's.** `config/summary.yaml` (language, limits, segment length), `prompts/writing.md`, `templates/summary.md`. Never edit them during a run.
 
 ## Procedure
 

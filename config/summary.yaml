@@ -5,14 +5,22 @@
 # quotes then stay in the speaker's language with a translation in parentheses.
 output_language: video
 
-# Videos without creator chapters are split into windows of this length. Each segment gets its own
-# "Section by section" entry, which is how the checker proves the whole video was covered.
-segment_minutes: 8
+# Videos without creator chapters are split into windows of this length. Every segment must be covered by a
+# "Section by section" line (long videos group neighbouring segments as [start–end]), which is how the checker
+# proves the whole video was covered.
+segment_minutes: 10
 
+# The summary fits one A4 page.
 limits:
-  bottom_line_words: 90
-  takeaways: [5, 10]          # min, max bullets (min drops to 3 for short videos)
+  max_words: 500              # whole summary, excluding title line, header and timecodes
+  bottom_line_words: 50
+  takeaways: [3, 5]           # min, max bullets
   short_video_minutes: 10
-  quotes_max: 6
-  section_min_words: 25
+  bullet_words: 30            # per takeaway / figure / action / limit
+  timeline_entry_words: 25    # per "Section by section" line
+  timeline_max_entries: 12
+  quotes_max: 2
+  facts_max: 4
+  actions_max: 3
+  limits_max: 2
   quote_match: 0.85           # share of a quote's words that must appear in order at its timecode
